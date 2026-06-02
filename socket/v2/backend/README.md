@@ -52,14 +52,14 @@ cp .env.example .env
 
 ### 配置项
 
-| 变量                          | 默认值 | 说明                              |
-| ----------------------------- | ------ | --------------------------------- |
-| `PORT`                        | 9999   | WebSocket 服务端口                |
-| `HEARTBEAT_INTERVAL`          | 60000  | 心跳间隔（毫秒）                  |
-| `DEFAULT_PUNISHMENT_TIME`     | 1      | 默认消息频率（每秒次数）          |
-| `DEFAULT_PUNISHMENT_DURATION` | 5      | 默认消息持续时间（秒）            |
-| `LOG_LEVEL`                   | info   | 日志级别（error/warn/info/debug） |
-| `VERBOSE`                     | false  | 是否启用详细日志                  |
+| 变量                            | 默认值   | 说明                          |
+|-------------------------------|-------|-----------------------------|
+| `PORT`                        | 9999  | WebSocket 服务端口              |
+| `HEARTBEAT_INTERVAL`          | 60000 | 心跳间隔（毫秒）                    |
+| `DEFAULT_PUNISHMENT_TIME`     | 1     | 默认消息频率（每秒次数）                |
+| `DEFAULT_PUNISHMENT_DURATION` | 5     | 默认消息持续时间（秒）                 |
+| `LOG_LEVEL`                   | info  | 日志级别（error/warn/info/debug） |
+| `VERBOSE`                     | false | 是否启用详细日志                    |
 
 ## 日志
 
