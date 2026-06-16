@@ -6,7 +6,7 @@
 
 [SOCKET 控制协议 V2 (仅限郊狼3.0)](socket/v2/README.md)
 
-[郊狼 WEB 蓝牙直连测试](web/README.md)
+[郊狼 WEB 蓝牙直连测试](https://www.dungeon-lab.com/bluetooth.html)
 
 ## 更新日志
 
