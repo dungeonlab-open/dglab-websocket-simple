@@ -162,8 +162,9 @@ class MessageRouter {
    * @param {WebSocket} ws 
    * @returns {object}
    */
-  handleCustomStrength(data, ws) {
-    const { clientId, targetId, message } = data;
+  handleCustomStrength(data, ws, timerManager) {
+    const { clientId, targetId, message, channel: dataChannel, strength: dataStrength } = data;
+    const sendChannel = dataChannel || 1;
 
     // 验证配对关系
     if (!this.connectionManager.isPaired(clientId, targetId)) {
@@ -175,28 +176,83 @@ class MessageRouter {
     }
 
     const targetClient = this.connectionManager.getClient(targetId);
-    if (targetClient && targetClient.ws) {
+    if (!targetClient || !targetClient.ws) {
+      return {
+        success: false,
+        code: '404',
+        message: '目标客户端不存在'
+      };
+    }
+
+    // 处理清除通道指令
+    if (message && message.includes("clear")) {
+      const clearMsg = `clear-${sendChannel}`;
+
       try {
         targetClient.ws.send(JSON.stringify({
           type: 'msg',
           clientId,
           targetId,
-          message
+          message: clearMsg
         }));
       } catch (err) {
-        logger.error(`发送强度消息失败：${err.message}`);
+        logger.error(`发送清除指令失败：${err.message}`);
         return {
           success: false,
           code: '500',
           message: '发送失败'
         };
       }
+
+      // 清除该通道的定时器
+      const channelLetter = sendChannel === 1 ? 'A' : 'B';
+      if (timerManager) {
+        timerManager.clearTimer(clientId, channelLetter, ws);
+      }
+
+      // 通知网页端发送完毕
+      try {
+        ws.send(JSON.stringify({
+          type: 'notify',
+          clientId,
+          targetId,
+          message: '发送完毕'
+        }));
+      } catch (err) {
+        logger.error(`发送完毕通知失败：${err.message}`);
+      }
+
+      return {
+        success: true,
+        code: '200',
+        message: '通道已清除'
+      };
+    }
+
+    // 处理指定强度
+    const sendStrength = dataStrength || 0;
+    const strengthMsg = `strength-${sendChannel}+2+${sendStrength}`;
+
+    try {
+      targetClient.ws.send(JSON.stringify({
+        type: 'msg',
+        clientId,
+        targetId,
+        message: strengthMsg
+      }));
+    } catch (err) {
+      logger.error(`发送强度消息失败：${err.message}`);
+      return {
+        success: false,
+        code: '500',
+        message: '发送失败'
+      };
     }
 
     return {
       success: true,
       code: '200',
-      message: '自定义强度已发送'
+      message: '指定强度已发送'
     };
   }
 

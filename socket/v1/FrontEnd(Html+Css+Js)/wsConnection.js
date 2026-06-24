@@ -130,6 +130,12 @@ function connectWs() {
                 break;
             default:
                 console.log("收到其他消息：" + JSON.stringify(message)); // 输出其他类型的消息到控制台
+                if (message?.message === '发送完毕') {
+                    setTimeout(() => {
+                        console.log('发送完毕，关闭闪电图标');
+                        setFlashlight(false);
+                    }, 3000);
+                }
                 break;
         }
     };

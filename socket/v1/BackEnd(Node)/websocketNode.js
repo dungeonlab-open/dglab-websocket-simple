@@ -113,7 +113,16 @@ wss.on('connection', function connection(ws) {
                     if (clients.has(targetId)) {
                         const client = clients.get(targetId);
                         const sendChannel = data.channel ? data.channel : 1
-                        const sendStrength = data.strength
+                        if (data.message.includes("clear")) {
+                            const webClient = clients.get(clientId);
+                            const msg = "clear-" + sendChannel;
+                            const sendData = { type: "msg", clientId, targetId, message: msg }
+                            client.send(JSON.stringify(sendData));
+                            clearInterval(timerId); // 清除定时器
+                            webClient.send("发送完毕")
+                            return;
+                        }
+                        const sendStrength = data.strength;
                         const msg = "strength-" + sendChannel + "+2+" + sendStrength;
                         const sendData = { type: "msg", clientId, targetId, message: msg }
                         client.send(JSON.stringify(sendData));

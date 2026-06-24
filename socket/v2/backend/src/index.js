@@ -185,7 +185,7 @@ function handleStrengthAdjust(data, ws) {
  * 处理指定强度（type 4）
  */
 function handleCustomStrength(data, ws) {
-  const result = messageRouter.handleCustomStrength(data, ws);
+  const result = messageRouter.handleCustomStrength(data, ws, timerManager);
 
   if (!result.success) {
     const errorResponse = {

@@ -210,7 +210,7 @@ function addOrIncrease(type, channelIndex) {
  * @param {number} channelIndex - 1:A通道 2:B通道
  */
 function clearAB(channelIndex) {
-    sendWsMsg({ type: 4, message: "clear-" + channelIndex });
+    sendWsMsg({ type: 4, channel: channelIndex, message: "clear" });
 }
 
 /**
